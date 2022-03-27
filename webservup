@@ -1,0 +1,46 @@
+---
+- name: set up httpd
+  hosts: all
+  become: yes
+  
+
+  tasks: 
+  - name: install httpd
+    yum: name=httpd state=latest
+    
+
+  - name: Start httpd
+    service: name=httpd state=started enabled=yes
+
+
+  - name: Install firewalld
+    yum:
+      name: firewalld
+      state: latest
+   
+  - name: start firewalld
+    service:
+      name: firewalld
+      state: started
+      enabled: yes
+    become: yes
+  
+  - name: enable 80
+    firewalld:
+      immediate: yes
+      service: http
+      zone: public
+      permanent: true
+      state: enabled
+    become: yes
+   
+  - name: Create html file
+    copy:
+      dest: /var/www/html/index.html
+      content: "Welcome to my server"
+
+
+
+
+
+

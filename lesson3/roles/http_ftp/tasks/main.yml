@@ -1,0 +1,71 @@
+---
+- name: Install python3-libsemanage
+  yum:
+    name: python3-libsemanage
+    state: present
+    
+    
+# tasks file for http_ftp
+- name: install packages
+  yum:
+      name: "{{ item }}"
+      state: present
+  loop: "{{ packages }}"
+
+
+- name: Starting_services
+  service:
+      name: "{{ item }}"
+      state: started
+      enabled: yes
+  loop: "{{ packages }}"
+
+- name: open ports
+  firewalld:
+    immediate: yes
+    service: "{{ item }}"
+    zone: public
+    permanent: true
+    state: enabled
+  loop: "{{ ports }}"
+
+- name: Create html file
+  copy:
+    dest: /var/www/html/index.html
+    content: "Welcome to my server"
+
+- name: Create upload dir
+  file:
+     path: "{{ path }}"
+     state: directory
+     mode: "{{ mode }}"
+#     owner: "ftp"
+#     group: "ftp"
+#     setype: "public_content_rw_t"
+#     seuser: "system_u"
+     
+
+
+- name: change state ftpd_anon_write =SELINUX=
+  seboolean:
+      name: ftpd_anon_write
+      state: yes
+      persistent: yes
+
+
+- name: change state ftpd_full_access =SELINUX=
+  seboolean:
+      name: ftpd_full_access
+      state: yes
+      persistent: yes
+
+
+- name: change ftp config file
+  template: 
+    src: vsftpd.j2
+    dest: /etc/vsftpd/vsftpd.conf
+    mode: 0500
+    owner: root
+    group: root
+  notify: restart_ftp
+

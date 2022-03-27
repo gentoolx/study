@@ -1,0 +1,40 @@
+---
+
+
+- name: add users
+  hosts: all
+  become: yes
+  
+
+  #vault_pass=1234
+  
+
+  tasks:
+          - name: Inculude vars
+            include_vars:
+                  dir: vars
+
+
+
+
+
+          - name: add user john
+            user:
+                    name: "{{ item }}"
+                    comment: "{{ item }}@example.com"
+                    password: "{{ password | password_hash('sha512') }}"
+                    state: absent
+                    create_home: yes
+            loop:
+                    - Alice
+                    - Bob
+                    - Carol 
+          - name: Delete home dirs
+            file:
+              path: /home/{{ item }}
+              state: absent
+            loop:
+                    - Alice
+                    - Bob
+                    - Carol 
+

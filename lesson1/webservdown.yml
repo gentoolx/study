@@ -1,0 +1,33 @@
+---
+
+- name: Stop and delete httpd
+  hosts: all
+  become: yes
+
+
+  tasks:
+  - name: Stopping httpd
+    service:
+      name: httpd
+      state: stopped
+      enabled: no
+
+
+  - name: delete httpd
+    yum:
+      name: httpd
+      state: absent
+
+  - name: Delete index.html
+    file:
+      path: /var/www/html/index.html
+      state: absent
+  
+  - name: close ports
+    firewalld:
+      immediate: yes
+      service: http
+      zone: public
+      permanent: true
+      state: disabled
+

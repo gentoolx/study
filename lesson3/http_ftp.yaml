@@ -1,0 +1,79 @@
+---
+
+
+- name: Playbook lesson 3
+  hosts: all
+  become: yes
+  
+  #python3-libsemanage
+
+
+  vars:
+          packages:
+                  - httpd
+                  - vsftpd
+                  - firewalld
+                   
+
+          ports:
+                  - http
+                  - ftp
+          
+          path: /var/ftp/pub/upload
+
+          mode: 0777
+
+
+  tasks:
+    - name: install packages
+      yum:
+            name: "{{ item }}"
+            state: latest
+      loop: "{{ packages }}"
+
+
+    - name: Starting_services
+      service:
+              name: "{{ item }}"
+              state: started
+              enabled: yes
+      loop: "{{ packages }}"
+         
+    - name: open ports
+      firewalld:
+        immediate: yes
+        service: "{{ item }}"
+        zone: public
+        permanent: true
+        state: enabled
+      loop: "{{ ports }}"
+
+    - name: Create html file
+      copy:
+        dest: /var/www/html/index.html
+        content: "Welcome to my server"
+    
+    - name: Create upload dir
+      file:
+              path: "{{ path }}"
+              state: directory
+              mode: "{{ mode }}"
+
+
+
+    - name: change state ftpd_anon_write
+      seboolean:
+              name: ftpd_anon_write
+              state: yes
+              persistent: yes
+
+
+    - name: change state ftpd_full_access
+      seboolean:
+              name: ftpd_full_access
+              state: yes
+              persistent: yes
+
+
+
+

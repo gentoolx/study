@@ -1,0 +1,25 @@
+---
+# vars file for http_ftp
+
+packages:
+    - httpd
+    - vsftpd
+    - firewalld
+
+
+ports:
+    - http
+    - ftp  
+
+path: /var/ftp/pub/upload
+
+mode: 0777
+
+anonymous_enable: "yes"
+local_enable: "yes"
+write_enable: "yes"
+anon_upload_enable: "yes"
+local_umask: "0007"
+anon_umask: "0222"
+anon_root: "/var/ftp/pub/"
+

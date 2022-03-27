@@ -1,0 +1,23 @@
+---
+
+
+- name: get ip from facts
+  hosts: all
+  gather_facts: yes
+  
+  tasks:
+  - name: Populate service facts
+    ansible.builtin.service_facts:
+  - name: print facts
+    debug:
+      var: ansible_facts.services['{{ item }}.service']['status']
+
+    loop:
+       - httpd
+       - vsftpd  
+  
+  - name: print ansible facts
+    debug:
+      var: ansible_default_ipv4['address']
+    when: ansible_default_ipv4['address'] == "192.168.1.52"
+  
