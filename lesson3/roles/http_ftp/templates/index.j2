@@ -9,8 +9,9 @@ Welcome to my website
 
 {% for field in ansible_default_ipv4 %}
 		 
-		<p><h2>	{{ field}} : {{ ansible_default_ipv4[field] }}
+		<p><h2>	{{ field}} : {{ ansible_default_ipv4[field] }} </h2> </p>
+		
 		
 
 {% endfor%}
-<p>today {{ ansible_date_time['date'] }}
+<p>today {{ ansible_date_time['date'] }} </p>
