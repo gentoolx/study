@@ -1,7 +1,13 @@
 Welcome to my website
 
-site based on {{ ansible_architecture }} 
-{% for i in ansible_lsb %}
+<p>site based on {{ ansible_architecture }} 
+<p>{{ ansible_distribution }}
+<p>{{ ansible_distribution_release }}
+<p>{{ ansible_distribution_version }}
+
+
+
+<p>{% for i in ansible_default_ipv4 %}
  {{ i }}
 {% endfor%}
-today {{ ansible_date_time['date'] }}
+<p>today {{ ansible_date_time['date'] }}
