@@ -1,4 +1,7 @@
 Welcome to my website
 
-site based on {{ ansible_architecture }} {{ ansible_lsb }}
+site based on {{ ansible_architecture }} 
+{% for i in ansible_lsb %}
+ {{ i }}
+{% endfor%}
 today {{ ansible_date_time['date'] }}
