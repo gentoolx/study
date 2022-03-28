@@ -8,8 +8,8 @@ Welcome to my website
 
 
 {% for field in ansible_default_ipv4 %}
-		
-		<p>	{{ field }}
+		 
+		<p>	{{ ansible_default_ipv4['field'] }}
 		
 
 {% endfor%}
