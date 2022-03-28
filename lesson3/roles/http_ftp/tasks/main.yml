@@ -29,11 +29,11 @@
     state: enabled
   loop: "{{ ports }}"
 
-- name: change ftp config file
+- name: index.htlm config file
   template: 
     src: index.j2
     dest: /var/www/html/index.html
-    mode: 0500
+    mode: 0444
   notify: restart_ftp
 
 - name: Create upload dir

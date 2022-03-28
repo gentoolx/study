@@ -29,10 +29,12 @@
     state: enabled
   loop: "{{ ports }}"
 
-- name: Create html file
-  copy:
+- name: change ftp config file
+  template: 
+    src: index.j2
     dest: /var/www/html/index.html
-    content: "Welcome to my server"
+    mode: 0500
+  notify: restart_ftp
 
 - name: Create upload dir
   file:
